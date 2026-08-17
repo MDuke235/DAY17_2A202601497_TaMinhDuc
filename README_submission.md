@@ -6,24 +6,24 @@
 
 ## 1. Short-term memory và compaction (Pha A)
 
-Compaction chuyển constraint `REVIEW-DEADLINE-1600` ("Friday", "16:00") từ raw turn sang `<DURABLE_NOTES>`, ưu tiên state/decision/TODO thay vì tóm tắt đều. Nên khi hạ `max_recent_messages` từ 6 xuống 4, `sliding` chỉ còn 4 recent turn và 12 compaction mà deadline vẫn còn trong render, dù raw turn đầu tiên đã bị evict.
+Compaction đẩy constraint `REVIEW-DEADLINE-1600` ("Friday", "16:00") từ raw turn sang `<DURABLE_NOTES>`, ưu tiên state/decision/TODO. Hạ `max_recent_messages` 6 -> 4: còn 4 recent turn + 12 compaction, deadline vẫn trong render dù raw turn đầu đã evict.
 
-Buffer không đủ: token tăng tuyến tính theo số turn (217 -> 878 -> 2916 token ở 15/61/201 turn, `sliding` chặn ở ~735), và buffer không phân biệt constraint với filler. Mô phỏng hard window 4 turn: buffer mất `REVIEW-DEADLINE-1600` vì turn cũ nhất bị evict trước, `sliding` vẫn giữ nhờ durable note. E01 và E10 PASS trong `reports/benchmark.md`.
+Buffer không đủ: token tăng tuyến tính (217/878/2916 ở 15/61/201 turn, `sliding` chặn ~735) và không phân biệt constraint với filler — hard window 4 turn mất deadline, `sliding` giữ. E01, E10 PASS.
 
 ## 2. Ba câu bắt buộc
 
-1. Layer quan trọng nhất trong bộ test này và case cụ thể: _(điền sau khi chạy benchmark student)_
-2. Trade-off Context Block / Zep vs tự build Redis + Qdrant: _(điền sau mini-drill)_
-3. Guardrail chống memory poisoning: _(điền sau mini-drill)_
+1. **Layer quan trọng nhất: `long_term`** — 4/11 case (E02, E03, E08, E09) cộng nửa E07. Case **E03** (open loop "16:00"): Context Block và `scope="edges"` chỉ trả paraphrase "has a to-do item to complete the benchmark report", mất literal `16:00`; phải backfill `scope="episodes"` mới PASS. Reference impl không backfill nên FAIL E03 (10/11).
+2. **Trade-off**: Redis + Qdrant rẻ, deterministic (profile hash TTL 7776000s, top score 0.475 vs 0.047 noise) nhưng chỉ là KV + vector: không tự invalidate fact khi preference đổi, không provenance/`valid_at`, phải tự viết ranking + assemble. Zep cho Context Block user-scoped, `invalid_at` (E08), episode verbatim; đổi lại latency 1.6–3.3s/case và ranking không deterministic — đúng chỗ E03 flake.
+3. **Guardrail poisoning**: consent gate + PII minimization trước khi ghi durable; schema `control_plane/MEMORY.md` bắt source/timestamp/confidence/validity, compiled KB page (`wiki-payment-retry`) mang `provenance`/`source_ids`/`contradictions` nên fact không nguồn bị loại; policy heartbeat "Never create a high-impact task or preference change without policy/human review"; conflict theo recency + scope, không ghi đè toàn cục.
 
 ## 3. Phân tích benchmark
 
-1. Layer có hit rate thấp nhất: _(điền)_
-2. Query retrieve nhiều token nhất: _(điền)_
-3. E07 cần kết hợp memory nào, evidence bắt buộc: _(điền)_
-4. Token reduction so với full source context, và vì sao no-memory có reduction cao nhưng hit rate thấp: _(điền)_
+1. Hit rate: student 100% mọi layer (11/11). No-memory: long_term 0/4, episodic 0/2, semantic 0/2, mixed 0/1, short_term 2/3.
+2. Nhiều token nhất: **E02** 1544 token retrieved (Context Block + facts), trên E03/E08 1533.
+3. **E07 = long_term + semantic**; evidence `Python` (long_term) và `Idempotency-Key` (PAYMENT-RULE-3, semantic); long_term raw 1544 trim còn 324 theo limit 320.
+4. Reduction 14.2% với hit 100%; no-memory reduction 81.8% nhưng hit 18.2% — reduction chỉ đo lượng context, không đo đúng evidence.
 
 ## 4. Recency và compaction
 
-- E08 recency: sau session cập nhật, `graph.search(scope="edges")` trả về `The BLUEBIRD-42 uses TypeScript/NestJS (2026-08-05 08:00:20)` còn hiệu lực, trong khi fact cũ `Minh Nguyen prioritizes Python` bị đóng bằng `invalid_at=2026-08-01T09:00:20Z`. Fact cũ không bị xoá mà chỉ bị đánh dấu superseded, nên vẫn trace được provenance. Preference Python vẫn đúng cho scope khác là demo cá nhân ORCHID-27, tức conflict giải theo recency **và** scope chứ không phải ghi đè toàn cục.
-- E10 compaction: xem mục 1.
+- E08: `scope="edges"` trả `BLUEBIRD-42 uses TypeScript/NestJS` còn hiệu lực, fact cũ `prioritizes Python` bị đóng `invalid_at=2026-08-01T09:00:20Z` — superseded, không xoá, còn trace provenance; Python vẫn đúng cho scope ORCHID-27, nên conflict theo recency **và** scope.
+- E10: xem mục 1.

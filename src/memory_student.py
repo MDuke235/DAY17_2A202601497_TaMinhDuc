@@ -44,7 +44,25 @@ class StudentMemory:
             # failing the whole case if the fact search errors out.
             fact_text = ""
 
-        return join_nonempty([context_block, fact_text], sep="\n\n")
+        # Facts are paraphrases: Zep keeps "has a to-do item to complete the
+        # benchmark report" but drops the literal "16:00" from it. Only the raw
+        # episode still carries the time, and the Context Block's own <EPISODES>
+        # slice is relevance-ranked, so that turn sometimes falls out and the
+        # open-loop case fails intermittently. A user-scoped episodes search
+        # backfills the verbatim turn; scope stays on user_id, so this cannot
+        # pull another user's data in.
+        try:
+            episodes = self.client.graph.search(
+                user_id=user_id,
+                query=cap_query(query),
+                scope="episodes",
+                limit=5,
+            )
+            episode_text = render_graph_search(episodes, episode_char_cap=200)
+        except Exception:
+            episode_text = ""
+
+        return join_nonempty([context_block, fact_text, episode_text], sep="\n\n")
 
     def retrieve_episodic(self, user_id: str, query: str) -> str:
         # Episodes are the raw turn excerpts, so they still carry the literal
@@ -65,15 +83,38 @@ class StudentMemory:
         return render_graph_search(results, episode_char_cap=180)
 
     def retrieve_semantic(self, graph_id: str, query: str) -> str:
-        # LAB TODO 3/4
-        # Search the standalone graph (graph_id, NOT user_id).
-        # Recommended: scope="episodes" — it returns raw document text that keeps
-        # literal markers (e.g. PAYMENT-RULE-3). The "auto" scope returns
-        # extracted facts that DROP those literal codes, so avoid it here.
-        # Fallback: scope="nodes".
-        raise NotImplementedError("LAB TODO: implement semantic graph search")
+        # Domain knowledge is not owned by any user, so it lives in a standalone
+        # graph: search by graph_id. Passing user_id here would return Minh's
+        # preferences instead of the shared playbook and fail both cases.
+        capped = cap_query(query)
+        try:
+            results = self.client.graph.search(
+                graph_id=graph_id,
+                query=capped,
+                scope="episodes",
+                limit=8,
+            )
+        except Exception:
+            # Some accounts/SDK versions do not serve the episodes scope on a
+            # standalone graph; nodes still carry the document summaries.
+            results = self.client.graph.search(
+                graph_id=graph_id,
+                query=capped,
+                scope="nodes",
+                limit=8,
+            )
+
+        # Episodes return the raw document text, which keeps the literal rule
+        # codes (PAYMENT-RULE-3, CONN-POOL-FIRST). Extracted facts ("auto")
+        # paraphrase them away, and the grader matches those codes verbatim.
+        # No episode_char_cap here: KB markers sit at the END of each document.
+        return render_graph_search(results)
 
     def assemble_context(self, layers: dict[str, str]) -> tuple[str, dict[str, dict[str, int]]]:
-        # LAB TODO 4/4
-        # Use ContextBudgetManager to enforce 10/4/3/3 budget and priority order.
-        raise NotImplementedError("LAB TODO: assemble/trim memory context")
+        # ContextBudgetManager already encodes the lab budget (10/4/3/3 of the
+        # 8000-token window) and the priority order short_term > long_term >
+        # episodic > semantic, trimming each layer from the tail because every
+        # retrieval path puts its most salient content at the head. Returning
+        # its breakdown keeps per-layer limit/raw/used token counts auditable in
+        # the benchmark report instead of hiding the trim.
+        return self.budget.assemble(layers)
