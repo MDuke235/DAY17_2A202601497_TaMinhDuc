@@ -25,5 +25,5 @@ Buffer không đủ: token tăng tuyến tính theo số turn (217 -> 878 -> 291
 
 ## 4. Recency và compaction
 
-- E08 recency: _(điền sau Pha B)_
+- E08 recency: sau session cập nhật, `graph.search(scope="edges")` trả về `The BLUEBIRD-42 uses TypeScript/NestJS (2026-08-05 08:00:20)` còn hiệu lực, trong khi fact cũ `Minh Nguyen prioritizes Python` bị đóng bằng `invalid_at=2026-08-01T09:00:20Z`. Fact cũ không bị xoá mà chỉ bị đánh dấu superseded, nên vẫn trace được provenance. Preference Python vẫn đúng cho scope khác là demo cá nhân ORCHID-27, tức conflict giải theo recency **và** scope chứ không phải ghi đè toàn cục.
 - E10 compaction: xem mục 1.
