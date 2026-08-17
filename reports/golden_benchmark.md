@@ -5,32 +5,32 @@
 - Cases: **20**
 - Passed: **20/20**
 - Evidence hit rate: **100.0%**
-- Average retrieval latency: **1381.7 ms**
-- Average token reduction vs full source context: **8.7%**
+- Average retrieval latency: **1404.3 ms**
+- Average token reduction vs full source context: **6.3%**
 - Golden bonus: **10/10** (100% required)
 
 | Case | Layer | Pass | Latency ms | Retrieved tokens | Token reduction | Missing / Error |
 | --- | --- | --- | ---: | ---: | ---: | --- |
 | G01 | short_term | PASS | 0.2 | 227 | 0.0% |  |
 | G02 | short_term | PASS | 0.0 | 133 | 0.0% |  |
-| G08 | long_term | PASS | 3873.5 | 831 | 0.0% |  |
-| G09 | long_term | PASS | 1807.0 | 1618 | 0.0% |  |
-| G12 | semantic | PASS | 397.5 | 365 | 20.5% |  |
-| G14 | semantic | PASS | 1812.7 | 217 | 43.9% |  |
-| G15 | semantic | PASS | 731.3 | 217 | 52.7% |  |
-| G19 | mixed | PASS | 1744.0 | 581 | 0.0% |  |
-| G03 | long_term | PASS | 1831.9 | 1603 | 0.0% |  |
-| G04 | long_term | PASS | 1672.6 | 1621 | 0.0% |  |
-| G05 | long_term | PASS | 1858.2 | 1653 | 0.0% |  |
-| G10 | episodic | PASS | 395.3 | 454 | 0.0% |  |
-| G11 | episodic | PASS | 322.3 | 454 | 0.0% |  |
-| G13 | semantic | PASS | 276.5 | 363 | 35.8% |  |
-| G16 | mixed | PASS | 2456.3 | 581 | 0.0% |  |
-| G18 | mixed | PASS | 497.8 | 489 | 13.5% |  |
-| G20 | mixed | PASS | 2314.9 | 831 | 0.0% |  |
-| G06 | long_term | PASS | 1670.5 | 1698 | 0.0% |  |
-| G07 | long_term | PASS | 1809.9 | 1643 | 0.0% |  |
-| G17 | mixed | PASS | 2160.8 | 581 | 8.1% |  |
+| G08 | long_term | PASS | 3969.4 | 929 | 0.0% |  |
+| G09 | long_term | PASS | 3166.2 | 1700 | 0.0% |  |
+| G12 | semantic | PASS | 261.2 | 418 | 8.9% |  |
+| G14 | semantic | PASS | 313.0 | 270 | 30.2% |  |
+| G15 | semantic | PASS | 278.6 | 270 | 41.2% |  |
+| G19 | mixed | PASS | 2109.1 | 581 | 0.0% |  |
+| G03 | long_term | PASS | 2049.6 | 1684 | 0.0% |  |
+| G04 | long_term | PASS | 1719.0 | 1712 | 0.0% |  |
+| G05 | long_term | PASS | 2247.3 | 1700 | 0.0% |  |
+| G10 | episodic | PASS | 272.6 | 650 | 0.0% |  |
+| G11 | episodic | PASS | 274.1 | 676 | 0.0% |  |
+| G13 | semantic | PASS | 923.8 | 416 | 26.4% |  |
+| G16 | mixed | PASS | 2092.9 | 581 | 0.0% |  |
+| G18 | mixed | PASS | 521.8 | 500 | 11.5% |  |
+| G20 | mixed | PASS | 2623.5 | 831 | 0.0% |  |
+| G06 | long_term | PASS | 1797.3 | 1659 | 0.0% |  |
+| G07 | long_term | PASS | 1679.3 | 1640 | 0.0% |  |
+| G17 | mixed | PASS | 1786.5 | 581 | 8.1% |  |
 
 ## Evidence excerpts
 
@@ -44,7 +44,7 @@
 
 ### G08 - long_term
 
-`<USER_SUMMARY> Lan's project is LOTUS-88. They prioritize Java and Spring Boot for backend development and do not use Python. </USER_SUMMARY>  <EPISODES> Episodes are source message or document excerpts shown in selection order.   - Created At: 2026-08-01 11:00:00     Source: message     Content: [user] {   "user_id": "lan-lab17",   "first_name": "Lan",   "last_name": "Tran",   "user_alias": "Lan Tran" }: Toi la Lan. Du an cua toi la LOTUS-88. Toi uu tien Java va Spring Boot, va khong dung Python trong vi du backend.   - Created At: 2026-08-01 11:00:20     Source: message     Content: Lab Assistant (assistant): Da hieu: LOTUS-88, Java + Spring Boot cho backend examples. </EPISODES>  <FACTS> `
+`<USER_SUMMARY> Lan's project is LOTUS-88. They prioritize Java and Spring Boot for backend development and do not use Python. </USER_SUMMARY>  <EPISODES> Episodes are source message or document excerpts shown in selection order.   - Created At: 2026-08-17 05:18:24     Source: message     Content: [user] {   "user_id": "lan-lab17",   "first_name": "Lan",   "last_name": "Tran",   "user_alias": "Evaluation User" }: Minh la Lan, minh dang muon them retry cho phan goi payment trong san pham cua minh va minh muon vi du code hop voi dung stack ma minh dang dung chu dung dua cho minh vi du cua ngon ngu khac. Ban gy y gium minh: dua theo backend ma minh da chon cho san pham cua minh, minh nen viet re`
 
 ### G09 - long_term
 
@@ -64,7 +64,7 @@
 
 ### G19 - mixed
 
-`<LONG_TERM> <USER_SUMMARY> Lan's project is LOTUS-88. They prioritize Java and Spring Boot for backend development and do not use Python. </USER_SUMMARY>  <EPISODES> Episodes are source message or document excerpts shown in selection order.   - Created At: 2026-08-01 11:00:00     Source: message     Content: [user] {   "user_id": "lan-lab17",   "first_name": "Lan",   "last_name": "Tran",   "user_alias": "Lan Tran" }: Toi la Lan. Du an cua toi la LOTUS-88. Toi uu tien Java va Spring Boot, va khong dung Python trong vi du backend.   - Created At: 2026-08-01 11:00:20     Source: message     Content: Lab Assistant (assistant): Da hieu: LOTUS-88, Java + Spring Boot cho backend examples. </EPISODE`
+`<LONG_TERM> <USER_SUMMARY> Lan's project is LOTUS-88. They prioritize Java and Spring Boot for backend development and do not use Python. </USER_SUMMARY>  <EPISODES> Episodes are source message or document excerpts shown in selection order.   - Created At: 2026-08-17 05:26:43     Source: message     Content: [user] {   "user_id": "lan-lab17",   "first_name": "Lan",   "last_name": "Tran",   "user_alias": "Evaluation User" }: Lan uu tien stack backend nao cho LOTUS-88?   - Created At: 2026-08-01 11:00:20     Source: message     Content: Lab Assistant (assistant): Da hieu: LOTUS-88, Java + Spring Boot cho backend examples. </EPISODES>  <FACTS> The timestamp shown for each fact is the reference `
 
 ### G03 - long_term
 
@@ -80,11 +80,11 @@
 
 ### G10 - episodic
 
-`EPISODE: Ten du an ca nhan cua toi la ORCHID-27. Toi thich Python va khong thich Java. Khi giai thich code, hay dung vi du ngan. EPISODE: Da hieu: demo ca nhan ORCHID-27, uu tien Python, tranh Java, vi du ngan. EPISODE: Toi dang hoc async/await va hay nham coroutine voi Task. Neu sau nay gap chu de nay, hay giai thich bang timeline. EPISODE: Toi se uu tien timeline khi giai thich coroutine va Task. EPISODE: TODO: hoan thanh benchmark report truoc thu Sau luc 16:00. Day la open loop LAB-REPORT-1600. EPISODE: Hom nay toi debug async HTTP. Toi da thu tang timeout len 60s nhung van fail. EPISODE: Hay kiem tra connection pool, lifecycle cua client va concurrency. EPISODE: Cach hieu qua la reuse a`
+`EPISODE: Toi dang hoc async/await va hay nham coroutine voi Task. Neu sau nay gap chu de nay, hay giai thich bang timeline. EPISODE: Hom nay toi debug async HTTP. Toi da thu tang timeout len 60s nhung van fail. EPISODE: Cach hieu qua la reuse aiohttp ClientSession va dat concurrency=20. Reflection: loi chinh la connection churn, khong phai timeout threshold. Ma su co ASYNC-FIX-20. EPISODE: Da ghi nhan trajectory: increase timeout khong hieu qua; ClientSession + concurrency=20 giai quyet connection churn. EPISODE: Minh dang ngoi mot minh viet cho xong cai ham retry cho POST payment de toi nay demo, va minh muon no vua dung dung ngon ngu ma minh thich khi lam viec ca nhan, vua bam sat dung po `
 
 ### G11 - episodic
 
-`EPISODE: Ten du an ca nhan cua toi la ORCHID-27. Toi thich Python va khong thich Java. Khi giai thich code, hay dung vi du ngan. EPISODE: Da hieu: demo ca nhan ORCHID-27, uu tien Python, tranh Java, vi du ngan. EPISODE: Toi dang hoc async/await va hay nham coroutine voi Task. Neu sau nay gap chu de nay, hay giai thich bang timeline. EPISODE: Toi se uu tien timeline khi giai thich coroutine va Task. EPISODE: TODO: hoan thanh benchmark report truoc thu Sau luc 16:00. Day la open loop LAB-REPORT-1600. EPISODE: Hom nay toi debug async HTTP. Toi da thu tang timeout len 60s nhung van fail. EPISODE: Hay kiem tra connection pool, lifecycle cua client va concurrency. EPISODE: Cach hieu qua la reuse a`
+`EPISODE: Toi dang hoc async/await va hay nham coroutine voi Task. Neu sau nay gap chu de nay, hay giai thich bang timeline. EPISODE: Cach hieu qua la reuse aiohttp ClientSession va dat concurrency=20. Reflection: loi chinh la connection churn, khong phai timeout threshold. Ma su co ASYNC-FIX-20. EPISODE: Da ghi nhan trajectory: increase timeout khong hieu qua; ClientSession + concurrency=20 giai quyet connection churn. EPISODE: Cap nhat moi: voi du an cong ty BLUEBIRD-42, backend bat buoc dung TypeScript voi NestJS; khong dung Python cho backend du an nay. Preference Python van dung cho demo ca nhan ORCHI EPISODE: Minh dang ngoi mot minh viet cho xong cai ham retry cho POST payment de toi na`
 
 ### G13 - semantic
 
@@ -96,7 +96,7 @@
 
 ### G18 - mixed
 
-`<EPISODIC> EPISODE: Ten du an ca nhan cua toi la ORCHID-27. Toi thich Python va khong thich Java. Khi giai thich code, hay dung vi du ngan. EPISODE: Da hieu: demo ca nhan ORCHID-27, uu tien Python, tranh Java, vi du ngan. EPISODE: Toi dang hoc async/await va hay nham coroutine voi Task. Neu sau nay gap chu de nay, hay giai thich bang timeline. EPISODE: Toi se uu tien timeline khi giai thich coroutine va Task. EPISODE: TODO: hoan thanh benchmark report truoc thu Sau luc 16:00. Day la open loop LAB-REPORT-1600. EPISODE: Hom nay toi debug async HTTP. Toi da thu tang timeout len 60s nhung van fail. EPISODE: Hay kiem tra connection pool, lifecycle cua client va concurrency. EPISODE: Cach hieu qua`
+`<EPISODIC> EPISODE: Ten du an ca nhan cua toi la ORCHID-27. Toi thich Python va khong thich Java. Khi giai thich code, hay dung vi du ngan. EPISODE: Toi dang hoc async/await va hay nham coroutine voi Task. Neu sau nay gap chu de nay, hay giai thich bang timeline. EPISODE: Cach hieu qua la reuse aiohttp ClientSession va dat concurrency=20. Reflection: loi chinh la connection churn, khong phai timeout threshold. Ma su co ASYNC-FIX-20. EPISODE: Cap nhat moi: voi du an cong ty BLUEBIRD-42, backend bat buoc dung TypeScript voi NestJS; khong dung Python cho backend du an nay. Preference Python van dung cho demo ca nhan ORCHI EPISODE: Toi nay minh muon viet cho tron ven cai retry payment ma vua dun`
 
 ### G20 - mixed
 
