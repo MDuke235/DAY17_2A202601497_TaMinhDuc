@@ -22,7 +22,10 @@ class Settings:
 
     # LLM used only for the UI chat reply (never for benchmark scoring).
     gemini_api_key: str = os.getenv("GEMINI_API_KEY", "") or os.getenv("GOOGLE_API_KEY", "")
-    gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite")
+    # A floating alias, not a pinned version: Google retired
+    # gemini-2.5-flash-lite for new keys ("no longer available to new users",
+    # 404), so a pinned default breaks the demo whenever a version is sunset.
+    gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-flash-lite-latest")
 
 
 settings = Settings()

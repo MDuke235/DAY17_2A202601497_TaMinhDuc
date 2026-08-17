@@ -2,7 +2,7 @@
 zep-cloud>=3.23.0,<4
 langgraph>=1.2.5,<2
 
-# Gemini LLM for the demo UI chat reply (gemini-2.5-flash-lite by default).
+# Gemini LLM for the demo UI chat reply (gemini-flash-lite-latest by default).
 google-genai>=1.0,<2
 
 # Local baseline stores

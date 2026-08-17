@@ -5,7 +5,9 @@ uses an LLM (see LAB.md): retrieval evidence is graded deterministically. Here
 Gemini only turns retrieved memory context into a grounded assistant reply so
 the mini-product feels real.
 
-Default model: gemini-2.5-flash-lite (override with GEMINI_MODEL).
+Default model: gemini-flash-lite-latest (override with GEMINI_MODEL). The alias
+is used on purpose — pinned 2.5 versions return 404 "no longer available to new
+users" once Google sunsets them.
 """
 
 from __future__ import annotations
